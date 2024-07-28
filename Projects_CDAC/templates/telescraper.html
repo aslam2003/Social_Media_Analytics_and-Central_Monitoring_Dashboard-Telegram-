@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Scraper</title>
+    <style>
+        .required-label::after {
+            content: "*";
+            color: red;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: left;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            border: 2px solid black;
+            margin-top: 50 px;
+            ;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+
+        .sidebar {
+            flex: 0 0 auto;
+            padding-right: 20px;
+            border-right: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .sidebar-button {
+            width: 100%;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .table-container {
+            text-align: center;
+            /* Center the table */
+            width: 100%;
+            /* Ensure table takes full width */
+        }
+
+        .sidebar-button:hover {
+            background-color: #45a049;
+        }
+
+        .content {
+            flex: 1;
+            padding-left: 20px;
+            padding-bottom: 20px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table tr td:first-child {
+            text-align: right;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 8px);
+            /* Adjusted for border */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        input[type="reset"] {
+            width: 45%;
+            /* Adjusted width */
+            padding: 8px;
+            /* Adjusted padding */
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover,
+        input[type="reset"]:hover,
+        input[type="authorize"]:hover {
+            background-color: #45a049;
+        }
+
+        .vertical-line {
+            border-left: 2px solid black;
+            height: 100%;
+            margin-left: 20px;
+        }
+
+        .results-box {
+            max-width: 100%;
+            width: auto;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .results-box table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .results-box th,
+        .results-box td {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <centre>
+        <div class="container">
+            <div class="sidebar">
+                <button class="sidebar-button" onclick="redirectToKeyword()">Keywords</button>
+                <button class="sidebar-button" onclick="redirectToAnalysis()">Analysis</button>
+            </div>
+            <div class="vertical-line"></div>
+            <div class="content">
+                <form action="#" method="post" onsubmit="displayAlert()">
+                    <div class="table-container"> <!-- Added div for table -->
+                        <table>
+                            <tr>
+                                <td><label for="co">Enter the login code:</label></td>
+                                <td><input type="text" name="login_code" placeholder="Enter login code"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="two_factor_password">Two Factor Authentication Password:</label></td>
+                                <td><input type="text" name="two_factor_password"
+                                        placeholder="Enter the code if two factor authentication is enabled"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    <input type="submit" value="Submit">
+                </form>
+
+
+                <div class="results-box">
+
+                    <p>{% with messages=get_flashed_messages() %}
+                        {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                        <p>{{message}}</p>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endwith %}</p>
+                    <table border="1">
+                        <tr>
+                            <th>Channel Name</th>
+                            <th>Channel Description</th>
+                            <th>Start Date</th>
+                            <th>Recent Date</th>
+                            <th>Number of Users</th>
+                            <th>Status</th>
+                            <th>Scraped Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for document in documents %}
+                            <tr>
+                                <td>{{ document["Channel Name"] }}</td>
+                                <td>{{ document["Channel Description"] }}</td>
+                                <td>{{ document["Start_date"] }}</td>
+                                <td>{{ document["Recent_Date"] }}</td>
+                                <td>{{ document["Number of Users"] }}</td>
+                                <td>{{ document["Status"] }}</td>
+                                <td>{{document["Count"]}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </centre>
+
+    <script>
+        function displayAlert() {
+            alert("If Login credentials are verified,then scraping starts.Please do not click any button")
+        }
+        setTimeout(function () {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                alert.style.display = 'none';
+            });
+        }, 5000);
+        function redirectToAnalysis() {
+            window.location.href = "{{url_for('analysis')}}";
+        }
+        function redirectToKeyword(){
+            window.location.href="{{url_for('addKeywords')}}"
+        }
+        function redirectToAddChannel(){
+            window.location.href="{{url_for('addchannel')}}"
+        }
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentication Page</title>
+<style>
+    body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content */
+  }
+
+body {
+    background-color: #9cdeec; /* Set your desired background color */
+  }
+  
+.container {
+    width: 300px; /* Adjust as needed */
+    margin:0 auto;
+    padding:20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #dcded9;
+    text-align: center; /* Center align the content inside the container */
+  }
+  
+
+input[type="text"],input[type="password"]{
+    width:300px;
+    height:25px;
+    text-align:center;
+}
+
+.container h1{
+    width:100%;
+    text-align:center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+ }
+  
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 25px;
+  }
+
+input[type="submit"], button {
+    width: 40%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+input[type="submit"]:hover, button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+  }
+  
+</style>
+</head>
+<body>
+<div class="container">
+<h1>User Authentication</h1><br>
+<form action="#" method="post" onsubmit="displayAlert(alertmessage)">
+      <div class="form-group">
+        <label for="username">Username</label><br>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required><br>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <input type="submit" value="Submit">
+      <button type="button" onclick="redirectToCredentials()">Create User</button>
+    </form>
+    {% with messages=get_flashed_messages() %}
+      {% if messages %}
+         {% for message in messages %}
+         <script>
+         alert("{{message}}");</script>
+         {% endfor %}
+       {% endif %}
+    {% endwith %}
+    <script>
+      function redirectToCredentials(){
+          window.location.href ="{{url_for('add_credentials')}}";
+      }
+    </script>
+
+</body>
+</html>

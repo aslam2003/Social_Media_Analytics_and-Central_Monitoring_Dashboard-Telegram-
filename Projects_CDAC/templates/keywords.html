@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #f2f2f2; /* Set background color */
+            color: #333; /* Set text color */
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff; /* Set table background color */
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e1a34dfe; /* Set th background color */
+            color: #000000; /* Set th text color */
+            text-align: center;
+        }
+        td{
+            background-color:lavender;
+        }
+
+        input[type="text"],
+        select,
+        button {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        select {
+            background-color: #fff;
+            color: #333;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .custom-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            /* Add margin to separate from radio buttons */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            text-align: center; /* Center align h1 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Keywords Table</h1>
+        <table id="dataTable" border="1">
+            <thead>
+                <th>Category</th>
+                <th>Keywords</th>
+            </thead>
+            <tbody id="dataBody">
+                {% for document in documents %}
+                <tr>
+                  <td>{{ document["Category"] }}</td>
+                  <td>{{ document["Keywords"] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h1>Enter Keyword and Select Option</h1>
+        <form method="post" action="#" id="form_1">
+            <label for="options">Select Option:</label>
+            <input type="hidden" name="form_id" value="form_1">
+            <select id="options" name="options">
+                <option value="Unauthorised use of Information">Unauthorised use of Information</option>
+                <option value="Offensive and inappropriate content">Offensive and inappropriate content</option>
+                <option value="Harmful to children">Harmful to children</option>
+                <option value="Violates intellectual property rights">Violates intellectual property rights</option>
+            </select>
+            <input type="text" id="keyword" name="keyword" required>
+            <button type="submit">Submit</button>
+        </form>
+        <h1>Unparliamentary Words</h1>
+        <table>
+            <thead>
+                <th>Unparliamentary Keywords</th>
+            </thead>
+            <tbody>
+                <tr>
+                   <td>{{words["Keywords"]}}</td>
+                </tr>
+            </tbody>
+            </table>
+            <form method="post" action="#" id="form_2">
+                <label for="options">Enter unparliamentary Word:</label>
+                <input type="hidden" name="form_id" value="form_2">
+                <input type="text"  name="keyword" required>
+                <button type="submit">Submit</button>
+            </form>
+    </div>
+    
+</body>
+
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Page</title>
+    <style>
+        body {
+            background-color: palegoldenrod;
+            /* Set your desired background color */
+            margin: 0;
+
+            padding: 0;
+            /* Remove default padding */
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left {
+
+            text-align: left;
+        }
+
+        .right {
+
+            text-align: right;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .search-container,
+        .sort-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .sort-container {
+            margin-left: auto;
+        }
+
+
+        .table-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            flex-direction: column;
+            /* Center-align vertically */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            background-color: blue;
+            /* Set your desired color here */
+            color: white;
+            /* Set text color */
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        th.sort-asc::after {
+            content: ' ▲';
+            /* Unicode for upward arrow */
+        }
+
+        th.sort-desc::after {
+            content: ' ▼';
+            /* Unicode for downward arrow */
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .search-wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 600px;
+            margin-bottom: 3px;
+            height: 30px;
+        }
+
+        .search-input {
+            width: 200px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .search-container {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type=text] {
+            padding: 10px;
+            margin-top: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+
+
+
+
+
+
+        .custom-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            /* Add margin to separate from radio buttons */
+        }
+
+        .custom-button:hover {
+            background-color: #45a049;
+        }
+
+        .radio-buttons {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: flex-start;
+        }
+
+        .options-wrapper {
+            display: flex;
+            flex-direction: row;
+        }
+
+
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            /* Add space between options */
+        }
+
+        .radio-button {
+            margin-right: 5px;
+            /* Add space between options */
+        }
+
+        .submit-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 800px;
+            /* Set the width to 800 pixels */
+            /* Add other styling properties as needed */
+        }
+
+        .radio-button {
+            display: inline-block;
+            /* Display radio buttons and labels inline */
+            margin-bottom: 10px;
+            /* Add spacing between radio buttons */
+            position: relative;
+            /* Position relative for absolute positioning of options */
+        }
+
+        /* Hidden by default */
+        .radio-button-options {
+            display: none;
+            position: absolute;
+            background-color: #dbd7d7;
+            border: 1px solid #eb4646;
+            padding: 10px;
+            z-index: 1;
+            width: 200px;
+            /* Adjust width as needed */
+            top: calc(100% + 5px);
+            /* Position options below the radio button */
+            left: 0;
+            /* Position options aligned with the radio button */
+        }
+
+        /* Show options on hover */
+        .radio-button:hover .radio-button-options {
+            display: block;
+        }
+
+        input[type="submit"] {
+            width: 20%;
+            /* Adjusted width */
+            padding: 5px;
+            /* Adjusted padding */
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: center;
+        }
+
+        #paginationControls button,
+        #paginationControls2 button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #paginationControls button.active,
+        #paginationControls2 button.active {
+            font-weight: bold;
+        }
+
+        #paginationControls button.disabled,
+        #paginationControls2 button.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>Scraping of Channels</h1>
+        <div class="container">
+
+            <div class="left">
+
+                <div class="search-container">
+                    <input type="text" id="table1Search" onkeyup="searchTable('table1')"
+                        placeholder="Search for channel...">
+                    <button type="button" onclick="searchChannels('table1')">Search</button>
+                </div>
+            </div>
+
+            
+
+        </div>
+    </center>
+    <center>
+    
+        <table border="1" id="table1">
+            <colgroup>
+                <col class="channel-name-col">
+                <col class="channel-total-col">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th onclick="sortTable('Channel Name','table1')"
+                        class="{{ 'sort-' + ('asc' if sort_order == 1 else 'desc') if sort_field == 'Channel Name' else '' }}">
+                        Channel Name</th>
+                    <th>Channel Description</th>
+                    <th onclick="sortTable('Start_date','table1')"
+                        class="{{ 'sort-' + ('asc' if sort_order == 1 else 'desc') if sort_field == 'Start_date' else '' }}">
+                        Start Date</th>
+                    <th>Recent Date</th>
+                    <th onclick="sortTable('Number of Users','table1')"
+                        class="{{ 'sort-' + ('asc' if sort_order == 1 else 'desc') if sort_field == 'Number of Users' else '' }}">
+                        Number of Users</th>
+                    <th>Status</th>
+                    <th onclick="sortTable('Count','table1')"
+                        class="{{ 'sorted-asc' if sort_field == 'Count' and sort_order == '1' else 'sorted-desc' if sort_field == 'Count' and sort_order == '-1' else '' }}">
+                        Messages Scraping Count</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody1">
+                {% for doc in channeldetails %}
+                <tr>
+                    <td>{{doc["Channel Name"]}}</td>
+                    <td>{{doc["Channel Description"]}}</td>
+                    <td>{{doc["Start_date"]}}</td>
+                    <td>{{doc["Recent_Date"]}}</td>
+                    <td>{{doc["Number of Users"]}}</td>
+                    <td>{{doc["Status"]}}</td>
+                    <td>{{doc["Count"]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <br>
+        <br>
+        <center>
+            <h1>Daily Scraping Count</h1>
+            <div class="container">
+                <!-- Left side: Search Container -->
+                <div class="left">
+    
+                    <div class="search-container">
+                        <input type="text" id="table3Search" onkeyup="searchTable('table3')"
+                            placeholder="Search for channel...">
+                        <button type="button" onclick="searchChannels('table3')">Search</button>
+                    </div>
+    
+                </div>
+            </div>
+    
+            <table id="table3">
+                <colgroup>
+                    <col class="channel-name-col">
+                    <col class="channel-date-col">
+                    <col class="channel-count-col">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('Channel Name','table3')"
+                            class="{{ 'sort-' + ('asc' if sort_order == 1 else 'desc') if sort_field == 'Channel Name' else '' }}">
+                            Channel Name</th>
+                        <th onclick="sortTable('day','table3')"
+                            class="{{ 'sort-' + ('asc' if sort_order == 1 else 'desc') if sort_field == 'Start_date' else '' }}">
+                            Day</th>
+                        <th onclick="sortTable('Count','table3')"
+                            class="{{ 'sorted-asc' if sort_field == 'Count' and sort_order == '1' else 'sorted-desc' if sort_field == 'Count' and sort_order == '-1' else '' }}">
+                            Scraping Count</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody3">
+                    {% for doc in message_daily_count %}
+                    <tr>
+                        <td>{{ doc["Channel Name"] }}</td>
+                        <td>{{ doc["Day"] }}</td>
+                        <td>{{ doc["Count"] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </center>
+        </div>
+        <br>
+        <br>
+
+    
+    <center>
+        <h1>Top 10 users</h1>
+        <table border="1">
+            <colgroup>
+                <col class="user-id-col">
+                <col class="user-name-col">
+                <col class="channel-count-col">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>UserID</th>
+                    <th>UserName</th>
+                    <th>Profile Photo</th>
+                    <th>Channels</th>
+                    <th>ChannelsCount</th>
+
+                </tr>
+            </thead>
+            <tbody id="tableBody4">
+                {%for doc in top_ten_users %}
+                <tr>
+                    <td>{{doc["_id"]}}</td>
+                    <td>{{doc["username"]}}</td>
+                    <td>
+                        {% if doc["profile_photo_path"] != "No Photo Available" %}
+                        <img src="{{ url_for('static', filename='User_Images/'+ doc['profile_photo_path']) }}"
+                            height="200" width="200" alt="User Photo" />
+
+                        {% else %}
+                        No Photo Available
+                        {% endif %}
+                    </td>
+                    <td>{{doc["channels"]}}</td>
+                    <td>{{doc["channel_count"]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </center>
+    <br>
+    <br>
+
+
+
+    <br>
+    <br>
+    <center>
+        <h1>Messages filtered from channel</h1>
+        <form action="#" method="post" class="radio-buttons">
+            <label for="option1" class="radio-button">Unauthorised use of Information
+                <div class="radio-button-options">
+                    <p>The keywords are:</p>
+                    {% for document in keywordsdocuments %}
+                    {% if document["Category"]=="Unauthorised use of Information" %}
+                    {% for keyword in document["Keywords"] %}
+                    <p>{{keyword}}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+            </label>
+            <input type="radio" id="option1" name="options" value="option1">
+
+            <label for="option2" class="radio-button">Offensive and inappropriate content
+                <div class="radio-button-options">
+                    <p>The keywords are:</p>
+                    {% for document in keywordsdocuments %}
+                    {% if document["Category"]=="Offensive and inappropriate content"%}
+                    {% for keyword in document["Keywords"] %}
+                    <p>{{keyword}}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+            </label>
+            <input type="radio" id="option2" name="options" value="option2">
+
+            <label for="option3" class="radio-button">Harmful to children
+                <div class="radio-button-options">
+                    <p>The keywords are:</p>
+                    {% for document in keywordsdocuments %}
+                    {% if document["Category"]=="Harmful to children" %}
+                    {% for keyword in document["Keywords"] %}
+                    <p>{{keyword}}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+            </label>
+            <input type="radio" id="option3" name="options" value="option3">
+
+            <label for="option4" class="radio-button">Violates intellectual property rights
+                <div class="radio-button-options">
+                    <p>The keywords are:</p>
+                    {% for document in keywordsdocuments %}
+                    {% if document["Category"]=="Violates intellectual property rights" %}
+                    {% for keyword in document["Keywords"] %}
+                    <p>{{keyword}}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+            </label>
+            <input type="radio" id="option4" name="options" value="option4">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <div class="table-wrapper">
+
+        </div>
+            <table id="filteredTable" border="1">
+                <thead>
+                    <th>Channel Name</th>
+                    <th>Message</th>
+                    <th>Keyword</th>
+                    <th>Count</th>
+                    <th>User_ID</th>
+                    <th>UserName</th>
+                </thead>
+                <tbody id="tableBody5">
+                    {% for item in filtered %}
+                    <tr>
+                        <td>{{item["Channel Name"]}}</td>
+                        <td>{{item["Text"]}}</td>
+                        <td>{{item["Keyword"]}}</td>
+                        <td>{{item["Count"]}}</td>
+                        <td>{{item["User_ID"]}}</td>
+                        <td>{% if item["Username"] == None %}
+                            <p>Not Available</p>
+                            {% else %}
+                            {{item["Username"]}}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+
+            <div id="paginationControls"></div>
+            <br>
+            <div class="table-wrapper">
+            </div>
+    
+                <h1>Frequent Words in Channels</h1>
+                <table border="1">
+                    <thead>
+                        <th>Channel Name</th>
+                        <th>Word</th>
+                    </thead>
+                    <tbody id="tableBody6">
+                        {% for document in frequentwords %}
+                        <tr>
+                            <td>{{document["Channel Name"]}}</td>
+                            <td>{{document["Word"]}}</td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <br>
+                <br>
+                <div class="table-wrapper">
+        
+                </div>
+        
+                    <h1>Unparliamentary Words in Channels</h1>
+                    <table border="1">
+                        <thead>
+                            <th>Channel Name</th>
+                            <th>Day</th>
+                            <th>Words</th>
+                            <th>Count</th>
+                        </thead>
+                        <tbody id="tableBody7">
+                            {% for document in unparliamentarywords %}
+                            <tr>
+                                <td>{{document["Channel Name"]}}</td>
+                                <td>{{document["Day"]}}</td>
+                                <td>{{document["Words"]}}</td>
+                                <td>{{document["Count"]}}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+    </center>
+
+    <br>
+    <center>
+        <h1>Reply to messages</h1>
+        <center>
+            <table border=1>
+                <thead>
+                    <th>Channel Name</th>
+                    <th>Message</th>
+                    <th>Message ID</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Origin Time</th>
+                    <th>Action</th>
+                    <th>Reply</th>
+                    <th>Reply Message ID</th>
+                    <th>Reply_User_ID</th>
+                    <th>Reply_Username</th>
+                    <th>Reply_Type</th>
+                    <th>Reply_Time</th>
+                    <th>Message_Type</th>
+                </thead>
+                <tbody>
+                    {% for document in replymessages %}
+                    <tr>
+                        <td>{{document["Channel Name"]}}</td>
+                        <td>{{document["Message"]}}</td>
+                        <td>{{document["Message ID"]}}</td>
+                        <td>{{document["User_ID"]}}</td>
+                        <td>{{document["Username"]}}</td>
+                        <td>{{document["Origin Time"]}}</td>
+                        <td>{{document["Action"]}}</td>
+                        <td>{{document["Reply"]}}</td>
+                        <td>{{document["Reply Message ID"]}}</td>
+                        <td>{{document["Reply_User_ID"]}}</td>
+                        <td>{{document["Reply_Username"]}}</td>
+                        <td>{{document["Reply_Type"]}}</td>
+                        <td>{{document["Reply Time"]}}</td>
+                        <td>{{document["Message_Type"]}}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+
+    </center>
+
+
+
+
+
+
+    <script>
+      function searchTable(tableId) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(tableId + "Search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById(tableId);
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0]; // Adjust index based on your table structure
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    </script>
+    <script>
+    function sortTable(field, tableId) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentField = urlParams.get('sort_field');
+        let sortOrder = urlParams.get('sort_order');
+
+        if (currentField === field) {
+            sortOrder = sortOrder === '1' ? '-1' : '1';  // Toggle order
+        } else {
+            sortOrder = '1';  // Default to ascending
+        }
+
+        urlParams.set('sort_field', field);
+        urlParams.set('sort_order', sortOrder);
+        urlParams.set('table_id', tableId);
+
+        window.location.search = urlParams.toString();
+    }
+    </script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const rowsPerPage = 5;
+        const maxPageButtons = 20;
+        let currentPage = 1;
+
+        function displayTable(tableId, paginationControlsId, rowsPerPage) {
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+            const totalRows = rows.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+            function showPage(page) {
+                rows.forEach((row, index) => {
+                    row.style.display = (index >= (page - 1) * rowsPerPage && index < page * rowsPerPage) ? '' : 'none';
+                });
+                updatePagination();
+            } function updatePagination() {
+                const  paginationControls = document.getElementById(paginationControlsId); paginationControls.innerHTML = '';
+                const createButton = (text, page, disabled = false) => {
+                    const button = document.createElement('button');
+                    button.textContent = text;
+                    if (disabled) {
+                        button.classList.add('disabled');
+                        button.disabled = true;
+                    } else {
+                        button.addEventListener('click', () => {
+                            currentPage = page;
+                            showPage(currentPage);
+                        });
+                    }
+                    return button;
+                };
+
+                if (currentPage > 1) {
+                    paginationControls.appendChild(createButton('Previous', currentPage - 1));
+                } else {
+                    paginationControls.appendChild(createButton('Previous', currentPage - 1, true));
+                }
+
+                const startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
+                const endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const button = createButton(i, i); if (i === currentPage) {
+                        button.classList.add('active');
+                    } paginationControls.appendChild(button);
+                } if (currentPage <
+                    totalPages) { paginationControls.appendChild(createButton('Next', currentPage + 1)); } else {
+                    paginationControls.appendChild(createButton('Next', currentPage + 1, true));
+                }
+            }
+            showPage(currentPage);
+        } displayTable('filteredTable', 'paginationControls', rowsPerPage);
+    });
+</script>
+</body>
+</html>

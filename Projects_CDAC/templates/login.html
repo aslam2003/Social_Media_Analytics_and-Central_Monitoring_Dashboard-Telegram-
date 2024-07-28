@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        .required-label::after {
+            content: "*";
+            color: red;
+        }
+
+        body {
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: url('https://img.craiyon.com/2024-04-25/NvHicP0gRAaCGJ1Oj67nRw.webp');
+            background-size: cover;
+            background-position: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table tr td:first-child {
+            text-align: right;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 8px);
+            /* Adjusted for border */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        input[type="reset"] {
+            width: 45%;
+            padding: 8px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Telegram Scraper</h1>
+    <form action="#" method="post">
+        <table>
+            <tr>
+                <td><label for="phone">Enter phone number with international code<span
+                            class="required-label"></span>:</label></td>
+                <td><input type="text" name="phone" placeholder="Enter phone number" required>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="channel">Enter the Channel Name<span class="required-label"></span>:</label></label>
+                </td>
+                <td><input type="text" name="channel" placeholder="Enter channel name" required></td>
+            </tr>
+        </table>
+        <label for="time">Select Time:</label>
+        <select id="time" name="time" onchange="showSubDropdown()">
+            <option value="hours">Hours</option>
+            <option value="minutes">Minutes</option>
+            <option value="seconds">Seconds</option>
+        </select>
+
+        <div id="subDropdown" style="display: none;">
+            <label for="subTime">Select Sub-Time:</label>
+            <select id="subTime" name="subTime"></select>
+        </div>
+
+        <script>
+            function showSubDropdown() {
+                // Get the selected value from the main dropdown
+                var selectedTime = document.getElementById("time").value;
+                var subDropdown = document.getElementById("subDropdown");
+                var subTimeDropdown = document.getElementById("subTime");
+
+                // Clear the options in the sub dropdown
+                subTimeDropdown.innerHTML = '';
+
+                // Add options based on the selected time
+                if (selectedTime === "hours") {
+                    for (var i = 1; i <= 12; i++) {
+                        var option = document.createElement("option");
+                        option.text = i + " hour";
+                        option.value = i;
+                        subTimeDropdown.appendChild(option);
+                    }
+                } else if (selectedTime === "minutes" || selectedTime === "seconds") {
+                    for (var i = 1; i <= 60; i++) {
+                        var option = document.createElement("option");
+                        option.text = i + " " + selectedTime;
+                        option.value = i;
+                        subTimeDropdown.appendChild(option);
+                    }
+                }
+
+                // Show the sub dropdown
+                subDropdown.style.display = "block";
+            }
+        </script>
+        <br>
+        <input type="submit" value="Send Login Code">
+        <input type="reset" value="Reset">
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Channel Scraping</title>
+    <style>
+        .required-label::after {
+            content: "*";
+            color: red;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.craiyon.com/2024-04-25/NvHicP0gRAaCGJ1Oj67nRw.webp');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table tr td:first-child {
+            text-align: right;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: calc(100%);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"],
+        input[type="reset"] {
+            width: 45%;
+            padding: 8px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3361e0;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        input[type="reset"]:hover {
+            background-color: #45a049;
+        }
+
+        .output-box {
+            margin-top: 40px;
+            padding: 40px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.9);
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authentication Details</h1>
+        <p>Login code will be sent to your Telegram account. Please wait!</p>
+        <p>Enter two-factor password if enabled.</p>
+        <form action="#" method="post">
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <td><label for="co">Enter the login code:</label></td>
+                        <td><input type="text" name="login_code" placeholder="Enter login code"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="two_factor_password">Two Factor Authentication Password:</label></td>
+                        <td><input type="text" name="two_factor_password" placeholder="Enter the 2FA passcode"></td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <button type="submit" name="submitform2_details">Submit</button>
+        </form>
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <script>
+                        alert("{{message}}");
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="output-box" id="outputBox">
+            <!-- Future outputs will be displayed here -->
+             <table border="1">
+                {% if channel_details %}
+                <thead>
+                    <th>Details</th>
+                    <th>Data</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Channel Name</td>
+                    <td>{{channel_details["Channel Name"]}}</td>
+                </tr> 
+                <tr>
+                    <td>Channel Description</td>
+                    <td>{{channel_details["Channel Description"]}}</td>
+                </tr>
+                <tr>
+                    <td>Channel Access Hash</td>
+                    <td>{{channel_details["Channel_Access_Hash"]}}</td>
+                </tr>
+                <tr>
+                    <td>Usercounts</td>
+                    <td>{{channel_details["Number of Users"]}}</td>
+                </tr>
+                <tr>
+                    <td>Admin Count</td>
+                    <td>{{channel_details["Admin_Count"]}}</td>
+                </tr>
+                <tr>
+                    <td>Kicked Count</td>
+                    <td>{{channel_details["Kicked_Count"]}}</td>
+                </tr>
+                <tr>
+                    <td>Banned Count</td>
+                    <td>{{channel_details["Banned_Count"]}}</td>
+                </tr>
+                <tr>
+                    <td>Linked Chat Type</td>
+                    <td>{{channel_details["Linked_Chat_Type"]}}</td>
+                </tr>
+                <tr>
+                    <td>Linked Chat Title</td>
+                    <td>{{channel_details["Linked Chat Title"]}}</td>
+                </tr>
+                <tr>
+                    <td>Megagroup</td>
+                    <td>{{channel_details["Megagroup"]}}</td>
+                </tr>
+                <tr>
+                    <td>Gigagroup</td>
+                    <td>{{channel_details["Gigagroup"]}}</td>
+                </tr>
+                <tr>
+                    <td>Verified</td>
+                    <td>{{channel_details["Verified"]}}</td>
+                </tr>
+                <tr>
+                    <td>Restriction Reason</td>
+                    <td>{{channel_details["Restriction_reasons"]}}</td>
+                </tr>
+                </tbody>
+             </table>
+        {% endif %}
+        </div>
+    </div>
+</body>
+</html>

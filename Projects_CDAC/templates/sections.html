@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  .button-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .button-container::before {
+    content: "";
+    margin-right: auto;
+    flex: 1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+  }
+
+  .button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .button:hover {
+    background-color: red;
+  }
+
+  .form-container {
+    margin-top: 20px; /* Add spacing between forms */
+  }
+
+  .form-container form {
+    margin-top: 20px; /* Add spacing between forms */
+  }
+
+</style>
+</head>
+<body>
+
+<div class="button-container">
+    {% if user_details.Role == "Admin" %}
+       <button id="addChannelNameBtn" type="button" class="button" onclick="redirectToAddChannel()">Add Channel Name</button>
+       <button type="button" class="button" onclick="redirectToKeyword()">Add Keywords</button>
+       <button type="button" class="button" onclick="redirectToAnalysis()">Analysis</button>
+    {% elif user_details.Role=="User" %}
+        <button type="button" class="button" onclick="redirectToAnalysis()">Analysis</button>
+    {% endif %}
+</div>
+
+
+
+<script>
+ function redirectToAnalysis() {
+            window.location.href = "{{url_for('analysis')}}";
+        }
+ function redirectToKeyword(){
+            window.location.href="{{url_for('addKeywords')}}"
+        }
+ function redirectToAddChannel(){
+            window.location.href="{{url_for('login')}}"
+        }
+
+</script>
+
+</body>
+</html>
